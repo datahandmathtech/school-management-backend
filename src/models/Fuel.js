@@ -100,6 +100,19 @@ const fuelSchema = new mongoose.Schema({
     attendance: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Attendance'
+    },
+    route: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Route',
+        default: null
+    },
+    periodKey: {
+        type: String,
+        default: null
+    },
+    abnormalMileageFlag: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

@@ -42,6 +42,8 @@ const seed = async () => {
         }
 
         console.log('Seed check completed');
+        const { seedTransportData } = require('./seedTransportModule');
+        await seedTransportData(targetCompany ? targetCompany._id : null);
     } catch (error) {
         console.error(`Seed Error: ${error.message}`);
     }

@@ -61,6 +61,18 @@ const maintenanceSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    downtimeDays: {
+        type: Number,
+        default: 0
+    },
+    isCapitalReplacement: {
+        type: Boolean,
+        default: false
+    },
+    periodKey: {
+        type: String,
+        default: null
     }
 }, {
     timestamps: true

@@ -33,16 +33,34 @@ const vehicleSchema = new mongoose.Schema({
     carType: {
         type: String,
         enum: ['SUV', 'Sedan', 'Hatchback', 'Bus', 'Mini Bus', 'Traveler', 'Electric Vehicle', 'Other'],
-        default: 'SUV'
+        default: 'Bus'
+    },
+    displayCode: {
+        type: String,
+        default: null
     },
     busType: {
         type: String,
-        enum: ['15-seater', '35-seater', '46-seater', 'Other', null],
+        enum: ['15-seater', '24-seater', '35-seater', '40-seater', '46-seater', '52-seater', 'Other', null],
         default: null
     },
     seatingCapacity: {
         type: Number,
+        default: 35
+    },
+    reservedSeats: {
+        type: Number,
         default: 0
+    },
+    assignedConductor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
+    defaultFuelType: {
+        type: String,
+        enum: ['Diesel', 'CNG', 'Petrol', 'Electric', 'Other'],
+        default: 'Diesel'
     },
     routeAssigned: {
         type: mongoose.Schema.Types.ObjectId,
@@ -206,7 +224,6 @@ vehicleSchema.virtual('documentStatuses').get(function () {
 
 // Indexes for performance optimization
 vehicleSchema.index({ eventId: 1 });
-vehicleSchema.index({ company: 1, isOutsideCar: 1 });
 vehicleSchema.index({ currentDriver: 1 });
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

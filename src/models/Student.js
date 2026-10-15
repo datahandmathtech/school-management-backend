@@ -50,9 +50,65 @@ const studentSchema = new mongoose.Schema({
     parentName: {
         type: String
     },
+    guardianRelation: {
+        type: String,
+        default: 'Parent'
+    },
+    originalAddress: {
+        type: String,
+        default: ''
+    },
+    normalizedAddress: {
+        type: String,
+        default: ''
+    },
+    geocodeStatus: {
+        type: String,
+        enum: ['Verified', 'Approximate', 'ManualPin', 'Missing'],
+        default: 'Missing'
+    },
+    assignedRoute: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Route',
+        default: null
+    },
+    shift: {
+        type: String,
+        enum: ['Morning', 'Evening', 'Both'],
+        default: 'Both'
+    },
+    tripDirection: {
+        type: String,
+        enum: ['Two-Way', 'Pickup-Only', 'Drop-Only'],
+        default: 'Two-Way'
+    },
+    transportStatus: {
+        type: String,
+        enum: ['Active', 'Suspended', 'Withdrawn', 'Non-Transport'],
+        default: 'Active'
+    },
+    activeFeePlan: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'FeePlan',
+        default: null
+    },
+    activeSubscription: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'StudentFeeSubscription',
+        default: null
+    },
+    activeAssignment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TransportAssignment',
+        default: null
+    },
+    effectiveFrom: {
+        type: Date,
+        default: Date.now
+    },
     status: {
         type: String,
-        enum: ['active', 'inactive'],
+        enum: ['active', 'inactive', 'suspended', 'withdrawn'],
         default: 'active'
     },
     feeAmount: {
@@ -61,7 +117,7 @@ const studentSchema = new mongoose.Schema({
     },
     feeType: {
         type: String,
-        enum: ['Monthly', 'Half-Yearly', 'Yearly'],
+        enum: ['Monthly', 'Quarterly', 'Term', 'Half-Yearly', 'Yearly', 'Annual'],
         default: 'Monthly'
     },
     financialYear: {

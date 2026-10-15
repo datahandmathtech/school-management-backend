@@ -60,6 +60,7 @@ const studentRoutes = require('./routes/studentRoutes');
 const routeRoutes = require('./routes/routeRoutes');
 const academicClassRoutes = require('./routes/academicClassRoutes');
 const feeRoutes = require('./routes/feeRoutes');
+const transportRoutes = require('./routes/transportRoutes');
 app.use('/api/auth', authRoutes);
 
 // --- PROXY FOR PDF IMAGES (NO AUTH) ---
@@ -92,6 +93,7 @@ app.use('/api/students', studentRoutes);
 app.use('/api/routes', routeRoutes);
 app.use('/api/academic-classes', academicClassRoutes);
 app.use('/api/fees', feeRoutes);
+app.use('/api/transport', transportRoutes);
 
 app.get('/api/db-check', async (req, res) => {
     const status = mongoose.connection.readyState;

@@ -129,29 +129,46 @@ const logToFile = (msg) => {
 
 const admin = (req, res, next) => {
     const role = req.user?.role?.toLowerCase();
-    if (role === 'admin' || role === 'superadmin') {
+    if (role === 'admin' || role === 'schooladmin' || role === 'superadmin') {
         next();
     } else {
-        res.status(401).json({ message: 'Not authorized as an admin' });
+        res.status(403).json({ message: 'Not authorized as an admin' });
     }
 };
 
 const driver = (req, res, next) => {
     const role = req.user?.role?.toLowerCase();
-    if (role === 'driver') {
+    if (role === 'driver' || role === 'conductor') {
         next();
     } else {
-        res.status(401).json({ message: 'Not authorized as a driver' });
+        res.status(403).json({ message: 'Not authorized as a driver' });
     }
 };
 
 const adminOrExecutive = (req, res, next) => {
     const role = req.user?.role?.toLowerCase();
-    if (role === 'admin' || role === 'executive' || role === 'superadmin') {
+    const allowed = ['admin', 'schooladmin', 'superadmin', 'executive', 'transportmanager', 'finance', 'admissionoperator', 'cashier'];
+    if (allowed.includes(role)) {
         next();
     } else {
-        res.status(401).json({ message: 'Not authorized' });
+        res.status(403).json({ message: 'Not authorized' });
     }
 };
 
-module.exports = { protect, admin, driver, adminOrExecutive, checkCompany };
+const authorizeRoles = (...allowedRoles) => {
+    const normalizedAllowed = allowedRoles.map(r => r.toLowerCase());
+    return (req, res, next) => {
+        const userRole = (req.user?.role || '').toLowerCase();
+        if (userRole === 'superadmin' || userRole === 'admin' || userRole === 'schooladmin') {
+            return next();
+        }
+        if (normalizedAllowed.includes(userRole)) {
+            return next();
+        }
+        return res.status(403).json({
+            message: `Access denied for role '${req.user?.role || 'Unknown'}'. Required: ${allowedRoles.join(', ')}`
+        });
+    };
+};
+
+module.exports = { protect, admin, driver, adminOrExecutive, checkCompany, authorizeRoles };
