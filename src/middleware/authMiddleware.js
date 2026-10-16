@@ -4,9 +4,11 @@ const User = require('../models/User');
 const protect = async (req, res, next) => {
     let token;
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    if ((req.headers.authorization && req.headers.authorization.startsWith('Bearer')) || req.query?.token) {
         try {
-            token = req.headers.authorization.split(' ')[1];
+            token = (req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
+                ? req.headers.authorization.split(' ')[1]
+                : req.query.token;
             const secret = process.env.JWT_SECRET || 'fleet_crm_secure_fallback_2024';
             const decoded = jwt.verify(token, secret);
 
